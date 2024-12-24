@@ -7,6 +7,7 @@ on:
       - develop
       - 'feature/**'
       - 'release/**'
+      - 'hotfix/**'
   pull_request:
     branches:
       - develop
@@ -52,16 +53,9 @@ jobs:
         run: |
           poetry run make model-test
           poetry run make api-test
-          poetry run utils-test
+          poetry run make utils-test
 
       # Paso 7: Generar reporte de cobertura
       - name: Coverage Report
         run: |
           poetry run pytest --cov=challenge tests/
-
-      # Paso 8: Subir reporte de cobertura (Opcional)
-      - name: Upload coverage to Codecov
-        if: success() && github.ref == 'refs/heads/main'
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}

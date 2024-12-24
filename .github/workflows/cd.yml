@@ -6,6 +6,7 @@ on:
       - develop
       - main
       - 'release/**'
+      - 'hotfix/**'
 
 jobs:
   build-and-deploy:
