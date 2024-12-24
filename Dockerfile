@@ -20,7 +20,7 @@ COPY challenge/ ./challenge/
 COPY tests/ ./tests/
 COPY data/ ./data/
 COPY Makefile ./
-COPY .env ./
+
 
 # Exponer el puerto que usará la aplicación
 EXPOSE 8000
