@@ -5,6 +5,8 @@ on:
     branches:
       - develop
       - main
+      - 'release/**'
+      - 'hotfix/**'
 
 jobs:
   build-and-deploy:
@@ -52,12 +54,12 @@ jobs:
       # Paso 8: Construir y etiquetar la imagen Docker
       - name: Build Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge:${{ github.sha }} .
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }} .
 
-      # Paso 9: Subir la imagen a Google Container Registry
+      # Paso 9: Subir la imagen a Artifact Registry
       - name: Push Docker image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge:${{ github.sha }}
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }}
 
       # Paso 10: Determinar el entorno de despliegue
       - name: Set Deployment Environment
@@ -69,6 +71,9 @@ jobs:
           elif [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_ENV
             echo "SERVICE_NAME=latam-flight-delay-challenge-staging" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == refs/heads/release/* ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+            echo "SERVICE_NAME=latam-flight-delay-challenge-staging" >> $GITHUB_ENV
           else
             echo "ENVIRONMENT=staging" >> $GITHUB_ENV
             echo "SERVICE_NAME=latam-flight-delay-challenge-staging" >> $GITHUB_ENV
@@ -78,8 +83,8 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge:${{ github.sha }} \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }} \
             --region ${{ secrets.GCP_REGION }} \
             --platform managed \
             --allow-unauthenticated \
-            --update-env-vars API_URL=https://$${{ env.SERVICE_NAME }}.run.app
+            --update-env-vars API_URL=https://${{ env.SERVICE_NAME }}.run.app
