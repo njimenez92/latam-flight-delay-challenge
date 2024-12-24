@@ -6,7 +6,6 @@ on:
       - develop
       - main
       - 'release/**'
-      - 'hotfix/**'
 
 jobs:
   build-and-deploy:
@@ -23,11 +22,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Paso 3: Instalar Poetry
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "::add-path::$HOME/.local/bin"
+      # Paso 3: Instalar Poetry usando una acción dedicada
+      - name: Setup Poetry
+        uses: python-poetry/setup-poetry@v2
+        with:
+          poetry-version: '1.8.5'
 
       # Paso 4: Instalar dependencias
       - name: Install dependencies

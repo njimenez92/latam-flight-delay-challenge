@@ -7,7 +7,6 @@ on:
       - develop
       - 'feature/**'
       - 'release/**'
-      - 'hotfix/**'
   pull_request:
     branches:
       - develop
@@ -32,11 +31,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # Paso 3: Instalar Poetry
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "::add-path::$HOME/.local/bin"
+      # Paso 3: Instalar Poetry usando una acción dedicada
+      - name: Setup Poetry
+        uses: python-poetry/setup-poetry@v2
+        with:
+          poetry-version: '1.8.5'
 
       # Paso 4: Instalar dependencias
       - name: Install dependencies
@@ -53,9 +52,16 @@ jobs:
         run: |
           poetry run make model-test
           poetry run make api-test
-          poetry run make utils-test
+          poetry run utils-test
 
       # Paso 7: Generar reporte de cobertura
       - name: Coverage Report
         run: |
           poetry run pytest --cov=challenge tests/
+
+      # Paso 8: Subir reporte de cobertura (Opcional)
+      - name: Upload coverage to Codecov
+        if: success() && github.ref == 'refs/heads/main'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
