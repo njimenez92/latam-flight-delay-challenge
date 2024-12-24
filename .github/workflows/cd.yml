@@ -87,7 +87,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo:${{ github.sha }} \
+            --image us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }} \
             --region us-central1 \
             --platform managed \
             --allow-unauthenticated \
