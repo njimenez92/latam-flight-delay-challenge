@@ -6,7 +6,6 @@ on:
       - develop
       - main
       - 'release/**'
-      - 'hotfix/**'
 
 jobs:
   build-and-deploy:
@@ -51,17 +50,22 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           install_components: 'gcloud'
 
-      # Paso 8: Construir y etiquetar la imagen Docker
-      - name: Build Docker image
+      # Paso 9: Configurar Docker para Artifact Registry
+      - name: Configure Docker for Artifact Registry
         run: |
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }} .
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      # Paso 9: Subir la imagen a Artifact Registry
-      - name: Push Docker image
+      # Paso 10: Construir la imagen Docker
+      - name: Build Docker Image
         run: |
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }}
+          docker build -t us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo:${{ github.sha }} .
 
-      # Paso 10: Determinar el entorno de despliegue
+      # Paso 11: Empujar la imagen Docker
+      - name: Push Docker Image
+        run: |
+          docker push us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo:${{ github.sha }}
+
+      # Paso 12: Determinar el entorno de despliegue
       - name: Set Deployment Environment
         id: set_env
         run: |
@@ -79,12 +83,12 @@ jobs:
             echo "SERVICE_NAME=latam-flight-delay-challenge-staging" >> $GITHUB_ENV
           fi
 
-      # Paso 11: Desplegar en Google Cloud Run
+      # Paso 13: Desplegar en Google Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }} \
-            --region ${{ secrets.GCP_REGION }} \
+            --image us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo:${{ github.sha }} \
+            --region us-central1 \
             --platform managed \
             --allow-unauthenticated \
             --update-env-vars API_URL=https://${{ env.SERVICE_NAME }}.run.app
