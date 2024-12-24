@@ -91,4 +91,5 @@ jobs:
             --region us-central1 \
             --platform managed \
             --allow-unauthenticated \
-            --update-env-vars API_URL=https://${{ env.SERVICE_NAME }}.run.app
+            --update-env-vars PORT=8080 \
+            --timeout=300
