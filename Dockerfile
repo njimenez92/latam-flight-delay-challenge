@@ -22,7 +22,7 @@ COPY utils/ ./utils/
 COPY Makefile ./
 
 # Exponer el puerto que usará la aplicación
-EXPOSE 8000
+EXPOSE 8080
 
 # Comando para ejecutar la aplicación
-CMD ["uvicorn", "challenge.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "challenge.api:app", "--host", "0.0.0.0", "--port", "8080"]
