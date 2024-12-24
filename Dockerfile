@@ -18,9 +18,8 @@ RUN poetry install --no-dev
 # Copiar el resto del código
 COPY challenge/ ./challenge/
 COPY tests/ ./tests/
-COPY data/ ./data/
+COPY utils/ ./utils/
 COPY Makefile ./
-
 
 # Exponer el puerto que usará la aplicación
 EXPOSE 8000
