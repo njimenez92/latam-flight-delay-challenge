@@ -1,6 +1,5 @@
 import unittest
 import pandas as pd
-from datetime import datetime
 from utils.utils import get_period_day, is_high_season, get_min_diff, delay
 
 

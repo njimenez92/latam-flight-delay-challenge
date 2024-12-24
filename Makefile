@@ -67,6 +67,15 @@ api-test:		## Ejecuta las pruebas de la API
 					  --junitxml=reports/junit.xml \
 					  --cov=challenge tests/api
 
+.PHONY: utils-test
+utils-test:		## Ejecuta las pruebas de la Utils de la API
+	mkdir -p reports
+	poetry run pytest --cov-config=.coveragerc --cov-report term \
+					  --cov-report html:reports/html \
+					  --cov-report xml:reports/coverage.xml \
+					  --junitxml=reports/junit.xml \
+					  --cov=utils tests/utils
+
 STRESS_URL = http://127.0.0.1:8000
 .PHONY: stress-test
 stress-test:	## Ejecuta pruebas de estrés con Locust

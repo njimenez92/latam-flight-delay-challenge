@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import json
 import numpy as np
 
 from fastapi.testclient import TestClient

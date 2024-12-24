@@ -23,11 +23,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Paso 3: Instalar Poetry
+      # Paso 3: Instalar Poetry manualmente
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          echo "::add-path::$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       # Paso 4: Instalar dependencias
       - name: Install dependencies

@@ -1,9 +1,7 @@
 import pandas as pd
-import numpy as np
 import logging
 from typing import Tuple, Union, List, Optional
 from sklearn.preprocessing import StandardScaler
-from sklearn.utils import class_weight
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -262,3 +260,4 @@ if __name__ == '__main__':
     # (Opcional) Evaluamos con todo el set
     metrics = model.evaluate(full_features, full_target)
     logger.info(f"📊 Evaluation Metrics on full data: {metrics}")
+    
