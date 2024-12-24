@@ -53,6 +53,7 @@ jobs:
         run: |
           poetry run make model-test
           poetry run make api-test
+          poetry run make utils-test
 
       # Paso 7: Generar reporte de cobertura
       - name: Coverage Report
