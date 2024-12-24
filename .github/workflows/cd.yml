@@ -1,0 +1,85 @@
+name: 'Continuous Delivery'
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Checkout del código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Paso 2: Configurar Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # Paso 3: Instalar Poetry
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "::add-path::$HOME/.local/bin"
+
+      # Paso 4: Instalar dependencias
+      - name: Install dependencies
+        run: |
+          poetry install --no-dev
+
+      # Paso 5: Configurar Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Paso 6: Iniciar sesión en Google Cloud
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # Paso 7: Configurar Google Cloud SDK
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          install_components: 'gcloud'
+
+      # Paso 8: Construir y etiquetar la imagen Docker
+      - name: Build Docker image
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge:${{ github.sha }} .
+
+      # Paso 9: Subir la imagen a Google Container Registry
+      - name: Push Docker image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge:${{ github.sha }}
+
+      # Paso 10: Determinar el entorno de despliegue
+      - name: Set Deployment Environment
+        id: set_env
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_ENV
+            echo "SERVICE_NAME=latam-flight-delay-challenge-prod" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+            echo "SERVICE_NAME=latam-flight-delay-challenge-staging" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+            echo "SERVICE_NAME=latam-flight-delay-challenge-staging" >> $GITHUB_ENV
+          fi
+
+      # Paso 11: Desplegar en Google Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/latam-flight-delay-challenge:${{ github.sha }} \
+            --region ${{ secrets.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --update-env-vars API_URL=https://$${{ env.SERVICE_NAME }}.run.app

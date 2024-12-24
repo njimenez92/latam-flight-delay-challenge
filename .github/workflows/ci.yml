@@ -1,0 +1,65 @@
+name: 'Continuous Integration'
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'release/**'
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.11]
+
+    steps:
+      # Paso 1: Checkout del código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Paso 2: Configurar Python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Paso 3: Instalar Poetry
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "::add-path::$HOME/.local/bin"
+
+      # Paso 4: Instalar dependencias
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      # Paso 5: Ejecutar linters
+      - name: Lint with flake8
+        run: |
+          poetry run flake8 challenge tests
+
+      # Paso 6: Ejecutar pruebas
+      - name: Run tests
+        run: |
+          poetry run make model-test
+          poetry run make api-test
+
+      # Paso 7: Generar reporte de cobertura
+      - name: Coverage Report
+        run: |
+          poetry run pytest --cov=challenge tests/
+
+      # Paso 8: Subir reporte de cobertura (Opcional)
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
