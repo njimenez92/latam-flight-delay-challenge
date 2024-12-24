@@ -1,43 +1,76 @@
 
-# Parte I
+# 🚀 **Documentación Completa del Proyecto LATAM Flight Delay Challenge**
 
+---
+# 📚 **Índice**
 
-## 🚀 Migración a Poetry y Pyenv
+1. 🚀 **Migración a Poetry y Pyenv**  
+2. 🐍 **Resumen de Bugs Corregidos y Soluciones**  
+   - 🐛 **Bug 1.1:** Incompatibilidad de NumPy 2.x  
+   - 🐛 **Bug 1.2:** Error en sns.barplot con Datos de Aerolíneas  
+   - 🐛 **Bug 1.3:** Error en sns.barplot con Datos por Día  
+   - 🐛 **Bug 1.4:** Error en sns.barplot con Datos por Mes  
+   - 🐛 **Bug 1.5:** Error en sns.barplot con Datos por Temporada Alta  
+   - 🐛 **Bug 1.6:** Error en sns.barplot con Datos por Tipo de Vuelo  
+   - 🐛 **Bug 1.7:** Error en sns.barplot con Datos por Periodo del Día  
+   - 🐛 **Bug 1.8:** Error al Importar xgboost  
+3. 🔍 **Análisis Detallado de la Exploración y Selección de Modelos**  
+   - 🏢 **Distribución de Vuelos por Aerolínea**  
+   - 📅 **Distribución de Vuelos por Día**  
+   - 🗓️ **Distribución de Vuelos por Mes**  
+   - 📆 **Distribución de Vuelos por Día de la Semana**  
+   - 🛠️ **Generación de Características**  
+4. 🤖 **Selección de Modelos**  
+   - 📏 **Comparación de Resultados**  
+   - 🥇 **Modelo Recomendado**  
+5. 📑 **Configuración de CI (Integración Continua)**  
+6. 🚀 **Configuración de CD (Despliegue Continuo)**  
+7. 🧠 **API y Modelo de Machine Learning**  
+8. ⚡ **Pruebas de Estrés**  
+9. 🛠️ **Arquitectura de Despliegue**  
+10. 📋 **Comandos Makefile Sugeridos**  
+11. 🔄 **Flujo de Trabajo CI/CD**  
+12. 🌍 **Acceder a los Servicios Desplegados**  
+13. 📡 **Probar los Endpoints de la API**  
+   - ✅ **Endpoint `/health`**  
+   - 📊 **Endpoint `/predict`**
+---
+## 🚀 1. Migración a Poetry y Pyenv
 La migración de Pip + Virtualenv a Poetry + Pyenv se justifica por:
 
-**1. Gestión Unificada de Dependencias:**
+* **Gestión Unificada de Dependencias:**
 
-* Un solo archivo (pyproject.toml) centraliza dependencias de producción, desarrollo y pruebas.
-* Bloqueo de versiones consistente con poetry.lock.
+    * Un solo archivo (pyproject.toml) centraliza dependencias de producción, desarrollo y pruebas.
+    * Bloqueo de versiones consistente con poetry.lock.
 
-**2. Manejo de Versiones de Python:**
+* **Manejo de Versiones de Python:**
 
-* Pyenv facilita el uso de versiones específicas de Python por proyecto.
-* Evita conflictos entre entornos.
+    * Pyenv facilita el uso de versiones específicas de Python por proyecto.
+    * Evita conflictos entre entornos.
 
-**3. Simplificación del Makefile:**
+* **Simplificación del Makefile:**
 
-* Comandos más claros y limpios usando poetry install y poetry run.
-* Eliminación de múltiples archivos requirements-*.txt.
+    * Comandos más claros y limpios usando poetry install y poetry run.
+    * Eliminación de múltiples archivos requirements-*.txt.
 
-**4. Estándar Moderno:**
+* **Estándar Moderno:**
 
-* Poetry sigue el estándar PEP 518.
-* Mejor compatibilidad con CI/CD (GitHub Actions).
+    * Poetry sigue el estándar PEP 518.
+    * Mejor compatibilidad con CI/CD (GitHub Actions).
 
-**5. Escalabilidad y Reproducibilidad:**
+* **Escalabilidad y Reproducibilidad:**
 
-* Instalaciones más rápidas y consistentes entre entornos.
-* Facilita la colaboración y despliegue.
+    * Instalaciones más rápidas y consistentes entre entornos.
+    * Facilita la colaboración y despliegue.
 
 
 
-## 1. 🐍 Resumen de Bugs Corregidos y Soluciones
+### 2. 🐍 Resumen de Bugs Corregidos y Soluciones
 A continuación, se presenta un resumen de los errores corregidos relacionados con el uso de las bibliotecas **NumPy**, **Seaborn** y funciones personalizadas.
 
 ---
 
-### 🐛 Bug 1.1: Incompatibilidad de NumPy 2.x
+#### 🐛 Bug 2.1: Incompatibilidad de NumPy 2.x
 **❗ Problema:**
 Al importar librerías como pandas o módulos que dependen de NumPy, apareció un error debido a la incompatibilidad entre la API de **NumPy 1.x** y **2.x**.
 
@@ -52,7 +85,7 @@ Esto asegura la estabilidad y compatibilidad con otras dependencias.
 
 ---
 
-### 🐛 Bug 1.2: Error en sns.barplot con Datos de Aerolíneas
+#### 🐛 Bug 2.2: Error en sns.barplot con Datos de Aerolíneas
 **❗ Problema:**
 Al intentar graficar los vuelos por aerolínea usando `sns.barplot` con argumentos posicionales:
 
@@ -71,7 +104,7 @@ sns.barplot(x='Airline', y='Flights', data=flights_by_airline, alpha=0.9)
 
 ---
 
-### 🐛 Bug 1.3: Error en sns.barplot con Datos por Día
+#### 🐛 Bug 2.3: Error en sns.barplot con Datos por Día
 **❗ Problema:**
 Al graficar los vuelos por día con argumentos posicionales:
 
@@ -90,7 +123,7 @@ sns.barplot(x='Day', y='Flights', data=flights_by_day, alpha=0.9)
 
 ---
 
-### 🐛 Bug 1.4: Error en sns.barplot con Datos por Mes
+#### 🐛 Bug 2.4: Error en sns.barplot con Datos por Mes
 **❗ Problema:**
 Al graficar vuelos por mes con argumentos posicionales:
 
@@ -109,7 +142,7 @@ sns.barplot(x='Month', y='Flights', data=flights_by_month, color='lightblue', al
 
 ---
 
-### 🐛 Bug 1.5: Error en sns.barplot con Datos por Temporada Alta
+#### 🐛 Bug 2.5: Error en sns.barplot con Datos por Temporada Alta
 **❗ Problema:**
 Al graficar tasas de retraso por temporada alta con listas como argumentos:
 
@@ -128,7 +161,7 @@ sns.barplot(x='High Season', y='Tasa (%)', data=high_season_rate, color='skyblue
 
 ---
 
-### 🐛 Bug 1.6: Error en sns.barplot con Datos por Tipo de Vuelo
+#### 🐛 Bug 2.6: Error en sns.barplot con Datos por Tipo de Vuelo
 **❗ Problema:**
 Al graficar las tasas de retraso por tipo de vuelo usando argumentos posicionales:
 
@@ -147,7 +180,7 @@ sns.barplot(x='Flight Type', y='Tasa (%)', data=flight_type_rate, color='skyblue
 
 ---
 
-### 🐛 Bug 1.7: Error en sns.barplot con Datos por Periodo del Día
+#### 🐛 Bug 2.7: Error en sns.barplot con Datos por Periodo del Día
 **❗ Problema:**
 Al intentar graficar tasas de retraso por periodo del día usando listas como argumentos posicionales:
 
@@ -166,7 +199,7 @@ sns.barplot(x='Period', y='Tasa (%)', data=period_day_rate, color='skyblue', alp
 
 ---
 
-### 🐛 Bug 1.8: Error al Importar xgboost
+#### 🐛 Bug 2.8: Error al Importar xgboost
 **❗ Problema:**
 Al intentar importar XGBoost se presentó el siguiente error:
 
@@ -190,31 +223,31 @@ print(xgb.__version__)
 
 ---
 
-### 🛠️ Explicación General de los Cambios
+#### 🛠️ Explicación General de los Cambios
 
-#### 🔹 **Reestructuración de Datos:**
+🔹 **Reestructuración de Datos:**
 - Se usaron **DataFrames** en lugar de listas o series.
 
-#### 🔹 **Parámetros Explícitos en `sns.barplot`:**
+🔹 **Parámetros Explícitos en `sns.barplot`:**
 - **`x`:** Define la columna del eje X.
 - **`y`:** Define la columna del eje Y.
 - **`data`:** Define el **DataFrame** fuente.
 
-#### 🔹 **Instalación de Dependencias:**
+🔹 **Instalación de Dependencias:**
 - Se utilizó **Poetry** para gestionar las dependencias.
 
-#### 🔹 **Mejoras Visuales:**
+🔹 **Mejoras Visuales:**
 - Se ajustaron etiquetas: `plt.xticks(rotation=90)`
 - Se ajustaron límites: `plt.ylim()`
 
-#### 🔹 **Compatibilidad con Nuevas Versiones:**
+🔹 **Compatibilidad con Nuevas Versiones:**
 - Todas las soluciones son compatibles con **Seaborn 0.11.0+**.
 
+---
+## 3. 🔍 Análisis Detallado de la Exploración y Selección de Modelos para la Predicción de Retrasos en Vuelos ✈️
 
-## 2. 🔍 Análisis Detallado de la Exploración y Selección de Modelos para la Predicción de Retrasos en Vuelos ✈️
 
-
-### 2.1 🏢 Distribución de Vuelos por Aerolínea
+#### 3.1 🏢 Distribución de Vuelos por Aerolínea
 Se realizó un análisis para determinar la cantidad de vuelos operados por cada aerolínea. Se utilizó un gráfico de barras donde se observó que unas pocas aerolíneas concentran la mayoría de los vuelos, mientras que otras tienen una participación mucho menor.
 
 **🔑 Observaciones Clave:**
@@ -222,7 +255,7 @@ Se realizó un análisis para determinar la cantidad de vuelos operados por cada
 - 🛫 Aerolíneas con baja frecuencia de vuelos, como American Airlines y Delta Airlines, tienen una participación marginal en comparación.
 - ⚖️ Estas diferencias deben considerarse al ajustar los pesos en el modelo predictivo.
 
-### 2.2 📅 Distribución de Vuelos por Día
+#### 3.2 📅 Distribución de Vuelos por Día
 Se analizó la distribución diaria de los vuelos para identificar patrones específicos en días del mes.
 
 **🔑 Observaciones Clave:**
@@ -230,7 +263,7 @@ Se analizó la distribución diaria de los vuelos para identificar patrones espe
 - 📉 Algunos días, especialmente a mitad de semana, tienen un número consistentemente bajo de vuelos.
 - ⚠️ Estos patrones pueden indicar días críticos donde los retrasos son más frecuentes.
 
-### 2.3 🗓️ Distribución de Vuelos por Mes
+#### 3.3 🗓️ Distribución de Vuelos por Mes
 Se realizó un análisis mensual para identificar tendencias estacionales.
 
 **🔑 Observaciones Clave:**
@@ -238,7 +271,7 @@ Se realizó un análisis mensual para identificar tendencias estacionales.
 - 🍂 Los meses de abril y septiembre presentan una disminución relativa.
 - 📊 Las tendencias estacionales son un factor clave a considerar en el modelo.
 
-### 2.4 📆 Distribución de Vuelos por Día de la Semana
+#### 3.4 📆 Distribución de Vuelos por Día de la Semana
 Se evaluó la distribución semanal de los vuelos.
 
 **🔑 Observaciones Clave:**
@@ -246,7 +279,7 @@ Se evaluó la distribución semanal de los vuelos.
 - 🛬 Los fines de semana, en particular los domingos, presentan variabilidad en función de las aerolíneas.
 - 📉 Los martes y miércoles suelen ser los días con menor actividad.
 
-### 🛠️ Generación de Características
+#### 🛠️ Generación de Características
 Se crearon las siguientes columnas para mejorar la capacidad predictiva del modelo:
 - **🌟 high_season:** Indica si el vuelo pertenece a una temporada alta.
 - **⏱️ min_diff:** Diferencia en minutos entre la hora programada y la hora real del vuelo.
@@ -255,13 +288,14 @@ Se crearon las siguientes columnas para mejorar la capacidad predictiva del mode
 
 Estas características resultaron ser relevantes para el análisis y modelado.
 
-## 3. 🤖 Selección de Modelos
+---
+## 4. 🤖 Selección de Modelos
 
 Se entrenaron y evaluaron dos modelos principales:
 - **🚀 XGBoost**
 - **📊 Logistic Regression**
 
-### 3.1 📏 Comparación de Resultados
+#### 4.1 📏 Comparación de Resultados
 Se evaluaron los modelos utilizando métricas clave:
 - **✅ Precisión:** Indica la proporción de predicciones positivas correctas respecto al total de predicciones positivas realizadas por el modelo.
 - **🔄 Recall:** Mide la capacidad del modelo para detectar todos los casos positivos reales. Es especialmente relevante en este caso, ya que perder un retraso importante puede tener consecuencias significativas.
@@ -274,20 +308,221 @@ Se evaluaron los modelos utilizando métricas clave:
 3. 🛠️ La reducción de características a las 10 más importantes no afectó negativamente el rendimiento.
 4. 🥇 **Recall** es la métrica más importante en este contexto, ya que es preferible capturar más vuelos retrasados aunque aumenten los falsos positivos.
 
-### 3.2 🥇 Modelo Recomendado
+#### 4.2 🥇 Modelo Recomendado
 Se recomienda utilizar **🚀 XGBoost con balanceo de clases y reducción a las 10 características más importantes** debido a:
 - ⚙️ Su capacidad para manejar datos tabulares.
 - 🚀 Su eficiencia en entornos productivos.
 - 📊 Su estabilidad en los resultados obtenidos.
 - 🥇 Su rendimiento superior en términos de **Recall** y **F1-Score**.
 
-### Conclusiones Finales
+#### Conclusiones Finales
 - 📅 La temporada alta, el periodo del día y la diferencia en minutos son variables clave para la predicción de retrasos.
 - 🌐 Se recomienda implementar el modelo **XGBoost** optimizado en una API para consultas en tiempo real.
 - 📊 Se deben monitorear las métricas del modelo periódicamente para ajustes futuros.
 - 🥇 **Recall** debe ser priorizado como la métrica principal para la evaluación continua del modelo.
+---
+## 📑 **5. Configuración de CI (Integración Continua)**
 
+El archivo **ci.yml** automatiza los siguientes pasos cada vez que se realiza un *push* o un *pull request* en las ramas configuradas (**main**, **develop**, **feature/**, **release/** y **hotfix/**).
 
+### 🔧 **Pasos Principales:**
+1. **Checkout del código:** Descarga el código fuente.
+2. **Configuración de Python:** Usa Python 3.11.
+3. **Instalación de Dependencias:** Usa Poetry para gestionar dependencias.
+4. **Linter:** Se ejecuta **flake8** para analizar la calidad del código.
+5. **Pruebas Unitarias:** Se ejecutan los siguientes comandos:
+   - `make model-test`
+   - `make api-test`
+   - `make utils-test`
+6. **Reporte de Cobertura:** Se genera un informe usando `pytest --cov`.
 
+📄 **Archivo ci.yml:** `ci.yml`
 
+---
 
+## 🚀 **6. Configuración de CD (Despliegue Continuo)**
+
+El archivo **cd.yml** realiza el despliegue del modelo y la API en **Google Cloud Run** utilizando Docker.
+
+### 🔧 **Pasos Principales:**
+1. **Checkout del código:** Descarga el repositorio.
+2. **Instalación de Dependencias:** Usa Poetry para instalar dependencias sin las de desarrollo.
+3. **Autenticación en Google Cloud:** Se utiliza `google-github-actions/auth`.
+4. **Construcción de Imagen Docker:** Se construye y etiqueta la imagen Docker.
+5. **Empuje de Imagen Docker:** Se sube la imagen al Artifact Registry de GCP.
+6. **Despliegue en Cloud Run:** Dependiendo de la rama (`main`, `develop`, `release/**`), se selecciona el entorno:
+   - **Producción:** `latam-flight-delay-challenge-prod`
+   - **Staging:** `latam-flight-delay-challenge-staging`
+
+📄 **Archivo cd.yml:** `cd.yml`
+
+---
+
+## 🧠 **7. API y Modelo de Machine Learning**
+
+### 🌐 **API con FastAPI:**
+- **Endpoint `/predict`:** Permite realizar predicciones.
+- **Endpoint `/health`:** Verifica el estado de la API.
+
+📄 **Código de la API:** `api.py`
+
+---
+
+## ⚡ **8. Pruebas de Estrés**
+
+Se utilizó **Locust** para simular múltiples usuarios consultando la API de predicción.
+
+### 🔧 **Configuración:**
+- **Escenario:** Simulación de múltiples peticiones concurrentes al endpoint `/predict`.
+- **Parámetros:** Número de usuarios, tasa de crecimiento, tiempo de prueba.
+
+📄 **Reporte de Pruebas de Estrés:** `stress-test.html`
+
+---
+
+## 🛠️ **9. Arquitectura de Despliegue**
+
+```scss
+┌────────────────────┐
+│    GitHub Repo     │
+│  (Public, main y   │
+│  ramas de feature) │
+└────────────────────┘
+          │
+          │ 1) Push/PR
+          ▼
+┌───────────────────────────┐
+│       GitHub Actions      │  <-- CI/CD (ci.yml y cd.yml)
+│  (Integración Continua y  │
+│   Despliegue Continuo)    │
+└───────────────────────────┘
+          │
+          │ 2) Test (CI)
+          │    - make model-test
+          │    - make api-test
+          │    - Linter & QA
+          │
+          └───────► OK?
+                    │
+                    │ 3) Build & Deploy (CD)
+                    │
+                    ▼
+             ┌─────────────────┐
+             │   Docker Image  │
+             │(Contenedor con  │
+             │  model.py y     │
+             │  api.py dentro) │
+             └─────────────────┘
+                    │
+                    │ 4) Deploy
+                    ▼
+        ┌───────────────────────────┐
+        │        Cloud Run         │
+        │    (o tu servicio de     │
+        │     preferencia en GCP)  │
+        └───────────────────────────┘
+                    │
+                    │ 5) API URL
+                    ▼
+         ┌────────────────────────┐
+         │   API (FastAPI)       │
+         │   Endpoint de /predict │
+         │   Endpoint de /health  │
+         └────────────────────────┘
+                    │
+                    │ 6) make stress-test (Local/Remoto)
+                    ▼
+            ┌───────────────────┐
+            │   Usuarios/DS    │
+            │   consumen la     │
+            │   predicción de   │
+            │   demoras         │
+            └───────────────────┘
+
+```
+
+---
+
+## 📋 **10. Comandos Makefile Sugeridos**
+
+```makefile
+install:
+	poetry install
+
+model-test:
+	poetry run pytest tests/model
+
+api-test:
+	poetry run pytest tests/api
+
+utils-test:
+	poetry run pytest tests/utils
+
+stress-test:
+	locust -f tests/stress/api_stress.py --host=https://api-url
+```
+
+---
+
+## 🔄 **11. Flujo de Trabajo CI/CD**
+
+### 🛠️ **Integración Continua (CI)**
+1. **Push/PR a ramas específicas.**
+2. **Ejecución de pruebas:**
+   - `make model-test`
+   - `make api-test`
+   - `make utils-test`
+3. **Linter:** flake8 analiza el código.
+4. **Generación de reportes de cobertura.**
+
+### 🚀 **Despliegue Continuo (CD)**
+1. **Autenticación en Google Cloud.**
+2. **Construcción de Imagen Docker.**
+3. **Empuje a Artifact Registry.**
+4. **Despliegue en Cloud Run.**
+
+---
+
+## 🌍 **12. Acceder a los Servicios Desplegados**
+
+- **Staging:** [https://latam-flight-delay-challenge-staging-591005290668.us-central1.run.app](https://latam-flight-delay-challenge-staging-591005290668.us-central1.run.app)  
+- **Producción:** [https://latam-flight-delay-challenge-prod-591005290668.us-central1.run.app](https://latam-flight-delay-challenge-prod-591005290668.us-central1.run.app)
+
+---
+
+## 📡 **13. Probar los Endpoints de la API**
+
+### ✅ **Endpoint `/health`**
+- **Descripción:** Verifica si la API está activa.
+- **Método:** `GET`
+- **Ejemplo de Respuesta:**  
+```json
+{
+  "status": "OK",
+  "detail": "your request was received"
+}
+```
+
+### 📊 **Endpoint `/predict`**
+- **Descripción:** Realiza predicciones basadas en los datos de entrada.
+- **Método:** `POST`
+- **Cuerpo de la Solicitud:**  
+```json
+{
+  "flights": [
+    {
+      "OPERA": "Aerolineas Argentinas",
+      "TIPOVUELO": "N",
+      "MES": 3
+    }
+  ]
+}
+```
+- **Respuesta Esperada:**  
+```json
+{
+  "predict": [0]
+}
+```
+
+---
