@@ -63,7 +63,7 @@ jobs:
       # Paso 11: Empujar la imagen Docker
       - name: Push Docker Image
         run: |
-          docker push us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo:${{ github.sha }}
+          docker push us-central1-docker.pkg.dev/latam-flight-delay-challenge/latam-flight-delay-challenge-repo/latam-flight-delay-challenge:${{ github.sha }}
 
       # Paso 12: Determinar el entorno de despliegue
       - name: Set Deployment Environment
