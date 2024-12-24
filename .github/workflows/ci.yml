@@ -58,9 +58,3 @@ jobs:
       - name: Coverage Report
         run: |
           poetry run pytest --cov=challenge tests/
-
-      # Paso 8: Subir reporte de cobertura (Opcional)
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
